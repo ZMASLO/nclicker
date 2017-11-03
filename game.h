@@ -40,6 +40,7 @@ class Window{
 		void draw_menu(int headlight); //draws menu on screen headlight determine witch option has -->
 		void draw_stats(Player *mplayer);
 		void draw_money(Player *mplayer);
+		void draw_workers();
 		void draw_popup(std::string information);
 		void draw_player_strenght(unsigned int strenght,unsigned int strength_max);
 		void draw_player_perclick(unsigned int perclick);
