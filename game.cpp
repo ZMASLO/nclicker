@@ -7,6 +7,7 @@ Window::Window(){
 	//WINDOW SIZE IS DEFAULT 45X145
 	main_menu=newwin(38,90,0,0);
 	stats = newwin(38,53,0,90);
+	money = newwin(3,143,38,0);
 }
 
 void Window::draw_borders(){
@@ -38,7 +39,8 @@ void Window::draw_menu(int headlight){
 
 void Window::draw_stats(Player *mplayer){
 	box(stats,0,0);
-	mvwprintw(stats,2,2,"Tescik taki malutki");
+	mvwprintw(stats,4,10,"Stamina: %d / %d",mplayer->get_strength(),mplayer->get_strength_max());
+	mvwprintw(stats,5,10,"Money per click: %d",mplayer->get_upgrade());
 	refresh_stats();
 }
 
@@ -58,12 +60,15 @@ void Window::draw_popup(std::string information){
 			break;
 		}
 	}
+	refresh_all();
 }
 
-void Window::draw_money(unsigned int money, unsigned int money_max){
+void Window::draw_money(Player *mplayer){
+	box(money,0,0);
 	attron(A_BOLD);
-	mvprintw(39,65,"Money: %d$ / %d$ ",money,money_max);	
+	mvwprintw(money,1,65,"Money: %d$ / %d$ ",mplayer->get_money(),mplayer->get_money_max());	
 	attroff(A_BOLD);
+	refresh_money();
 }
 
 void Window::draw_player_strenght(unsigned int strength, unsigned int strength_max){
@@ -72,6 +77,11 @@ void Window::draw_player_strenght(unsigned int strength, unsigned int strength_m
 
 void Window::draw_player_perclick(unsigned int perclick){
 	mvprintw(4,107,"Money per click: %d",perclick);
+}
+
+void Window::refresh_all(){
+	refresh_main_menu();
+	refresh_stats();
 }
 
 Player::Player(){

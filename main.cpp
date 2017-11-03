@@ -12,10 +12,10 @@ int main(void){
 	Window game;
 	Player mplayer;
 	while(run==1){
-		game.draw_money(mplayer.get_money(),mplayer.get_money_max());
+		game.draw_money(&mplayer);
 		game.draw_stats(&mplayer);
-		game.draw_player_strenght(mplayer.get_strength(),mplayer.get_strength_max());
-		game.draw_player_perclick(mplayer.get_upgrade());
+		//game.draw_player_strenght(mplayer.get_strength(),mplayer.get_strength_max());
+		//game.draw_player_perclick(mplayer.get_upgrade());
 		ch = getch();			/* Wait for user input */
 		if(ch==32 && mplayer.get_strength()>0){ //minig (aka clicking)
 			if(mplayer.get_money()+mplayer.get_upgrade()<mplayer.get_money_max()){

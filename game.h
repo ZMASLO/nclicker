@@ -32,19 +32,22 @@ class Window{
 	private:
 		WINDOW *main_menu;
 		WINDOW *stats;
+		WINDOW *money;
 		WINDOW *popup;
 	public:
 		Window();
 		void draw_borders();
 		void draw_menu(int headlight); //draws menu on screen headlight determine witch option has -->
 		void draw_stats(Player *mplayer);
+		void draw_money(Player *mplayer);
 		void draw_popup(std::string information);
-		void draw_money(unsigned int money,unsigned  int money_max);
 		void draw_player_strenght(unsigned int strenght,unsigned int strength_max);
 		void draw_player_perclick(unsigned int perclick);
 		void refresh_main_menu() { wrefresh(main_menu); };
 		void refresh_stats() { wrefresh(stats); };
 		void refresh_popup() { wrefresh(popup); };
+		void refresh_money() { wrefresh(money); };
+		void refresh_all();
 
 		
 };
