@@ -1,7 +1,5 @@
-#include <iostream>
 #include "game.h"
 #include <ncurses.h>
-#include <string>
 
 Window::Window(){
 	//WINDOW SIZE IS DEFAULT 45X145
