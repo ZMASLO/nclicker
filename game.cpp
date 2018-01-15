@@ -6,6 +6,7 @@ Window::Window(){
 	main_menu=newwin(38,90,0,0);
 	stats = newwin(38,53,0,90);
 	money = newwin(3,143,38,0);
+	menu_type=0;
 }
 
 void Window::draw_borders(){
@@ -20,19 +21,29 @@ void Window::draw_borders(){
 		}
 	}
 }
-void Window::draw_menu(int headlight){
+void Window::draw_menu(){
 	box(main_menu,0,0);
-	mvwprintw(main_menu,4,10,"Items");
-	mvwprintw(main_menu,5,10,"Shop");
-	mvwprintw(main_menu,6,10,"Builders");
-	mvwprintw(main_menu,7,10,"Tavern");
-	mvwprintw(main_menu,8,10,"Bank");
+	if(menu_type==0){
+		mvwprintw(main_menu,4,10,"Inventory");
+		mvwprintw(main_menu,5,10,"Shop");
+		mvwprintw(main_menu,6,10,"Builders");
+		mvwprintw(main_menu,7,10,"Tavern");
+		mvwprintw(main_menu,8,10,"Bank");
+	}
+	if(menu_type==5){
+		mvwprintw(main_menu,4,10,"<-- Back");
+		mvwprintw(main_menu,5,10,"Buy upgrade!");
+	}
+}
+
+void Window::draw_headlight(int headlight){
 	for(int i=4; i<9; ++i){
 		mvwprintw(main_menu,i,6,"   ");
 	}
 	attron(A_BOLD);
 	mvwprintw(main_menu,headlight+4,6,"-->");
 	attroff(A_BOLD);
+
 }
 
 void Window::draw_stats(Player *mplayer){
@@ -82,6 +93,26 @@ void Window::refresh_all(){
 	refresh_stats();
 }
 
+void Window::selected(int headlight){
+	/*
+	 *	Menu types:
+	 *	0 - main menu
+	 *	1 - inventory
+	 *	2 - Shop
+	 *	3 - Builders
+	 *	4 - Tavern
+	 *	5 - Bank
+	 */
+	if(menu_type==0){ //options from main menu
+		if(headlight+1==1) menu_type=1;
+		if(headlight+1==5) menu_type=5;
+	}
+	if(menu_type!=0 && headlight+1==1) menu_type=0; //BACK TO MAIN MENU
+	wclear(main_menu); //clear menu to avoid mistakes in render
+	draw_menu();
+	refresh_main_menu();
+}
+
 Player::Player(){
 	money=0;
 	money_max=5000;
@@ -91,7 +122,12 @@ Player::Player(){
 }
 
 void Player::add_money(int ammount){
-	money=money+ammount;	
+	if((money+ammount) < money_max){
+		money=money+ammount;	
+	}
+	else{
+		money=money_max; //to not override maximum ammount
+	}
 }
 
 void Player::add_strength(int ammount){
@@ -102,5 +138,9 @@ void Player::add_strength_max(int ammount){
 	strength_max=strength_max+ammount;
 }
 
+void Upgrade::bank(){
+    ++bank_lvl;
+    money_max=money_max*bank_lvl; 
+}
 
 

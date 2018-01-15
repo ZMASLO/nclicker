@@ -1,5 +1,6 @@
 #include <iostream>
 #include <ncurses.h>
+#include "shop.h"
 /*
 TO DO:
 - DRAWING STATS
@@ -7,7 +8,7 @@ TO DO:
 - DRAWING BOTTOM INFO
 */
 class Player{
-	private:
+	protected:
 		std::string name;
 		unsigned int upgrade; //money per click
 		unsigned int strength; // current value of how many hits can perfform without resting
@@ -30,6 +31,7 @@ class Player{
 
 class Window{
 	private:
+		int menu_type;
 		WINDOW *main_menu;
 		WINDOW *stats;
 		WINDOW *money;
@@ -37,7 +39,8 @@ class Window{
 	public:
 		Window();
 		void draw_borders();
-		void draw_menu(int headlight); //draws menu on screen headlight determine witch option has -->
+		void draw_menu(); //draws menu and determine whitch one should be displayed
+		void draw_headlight(int headlight); //draws headlight -->
 		void draw_stats(Player *mplayer);
 		void draw_money(Player *mplayer);
 		void draw_workers();
@@ -49,29 +52,15 @@ class Window{
 		void refresh_popup() { wrefresh(popup); };
 		void refresh_money() { wrefresh(money); };
 		void refresh_all();
+		void selected(int headlight); //selected option form menu is executed
 
 		
 };
 
-class Shop{
-	private:
-	public:
-		void item_list();
-};
-
-class Item{
-	private:
-		std::string name;
-		unsigned int price;
-		int function;
-	public:
-		Item();
-		Item(std::string name, int price, int function);
-		~Item();
-		void print_name();
-		unsigned int get_price() { return price; };
-};
-
-class Worker{
+class Upgrade : public Player{
+    protected:
+	int bank_lvl=1;
+    public:
+	void bank();
 };
 
