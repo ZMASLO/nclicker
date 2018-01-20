@@ -88,6 +88,18 @@ unsigned int* Shop :: get_food(int id){
     return pointer;
 }
 
+unsigned int* Shop :: get_potions(int id){
+    unsigned int* pointer;
+    unsigned int tab[3];
+    pointer=tab;
+    tab[0]=potions[id].get_price();
+    tab[1]=potions[id].get_quantity();
+    tab[2]=potions[id].get_stamina();
+
+    return pointer;
+}
+
+
 std::string Shop::print_food(int id){
     return foods[id].print_data();
 }

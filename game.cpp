@@ -134,12 +134,13 @@ void Window::selected(){
 	/*
 	 *	Menu types:
 	 *	0 - main menu
-	 *	1 - inventory
+	 *	1 - Alchemist
 	 *	2 - Shop
-	 *	3 - Builders
+	 *	3 - Upgrades
 	 *	4 - Tavern
 	 *	5 - Bank
 	 */
+	unsigned int *data; //declaring pointer (of array)
 	if(menu_type==0){ //options from main menu
 		if(menu_headlight+1==1) menu_type=1;
 		if(menu_headlight+1==2) menu_type=2;
@@ -147,26 +148,31 @@ void Window::selected(){
 	}
 	else{
 	    if(menu_type!=0 && menu_headlight+1==1) menu_type=0; //BACK TO MAIN MENU
-	}
-	if(menu_type==2){ //options for alchemist
-	   unsigned int *data; //declaring pointer (of array) 0 - price, 1 - quantity, 2 - stamina
-	   data=mshop->get_food(menu_headlight-1); //assigning pointer to array
-	   if(data[1]>0){
+	    if(menu_type>0){ //options for shop
+		if(menu_type==1) data=mshop->get_potions(menu_headlight-1); //assigning pointer to array
+		if(menu_type==2) data=mshop->get_food(menu_headlight-1); //assigning pointer to array
+		if(data[1]>0){
 		   if(mplayer->get_money()>data[0]){
 	               mplayer->add_money(data[0]*-1); //price * -1 to substract money
-		       mshop->buy_food(menu_headlight-1);
-		       mplayer->add_strength(data[2]);
+		       if(menu_type==1){
+			   mshop->buy_potion(menu_headlight-1);
+			   mplayer->add_strength_max(data[2]);
+		       }
+		       if(menu_type==2){
+	    		    mshop->buy_food(menu_headlight-1);
+			    mplayer->add_strength(data[2]);
+		       }
 		   }
 		   else{
 		       draw_popup("You don't have enough money!");
 		   }
-	   }
-	   else{
-	       draw_popup("Item is not available yet!");
-	   }
+		}
+	    else{
+		draw_popup("Item is not available yet!");
+	    }
 	   
+	    }
 	}
-	//menu_headlight=0;
 	wclear(main_menu); //clear menu to avoid mistakes in render
 	draw_menu();
 	refresh_main_menu();
