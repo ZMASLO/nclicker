@@ -31,8 +31,12 @@ int main(void){
 	cbreak();
 	nodelay(stdscr, TRUE);
 	keypad(stdscr, TRUE);		//keypad F1 keys etc
+	curs_set(0);
 	Window game;
 	Player mplayer;
+	Shop mshop;
+	game.set_shop(mshop);
+	mshop.generate_items(); //generating items for shop
 	Upgrade mupgrade;
 	clock_t start,end;
 	time(&start);
@@ -72,12 +76,14 @@ int main(void){
 		    game.selected(menu_option);
 		    menu_option=0;
 		    game.draw_headlight(menu_option);
+		    game.refresh_main_menu();
 		}
 		if(ch==27){ //escape pause menu
 		    game.draw_popup("Game is paused!");
 		}
 		if(ch=='o'){
-			game.draw_popup("supertest");
+			//Food chleb("Bread",10,1,5);
+			game.draw_popup(mshop.print_item(2));
 			game.draw_menu();
 			game.refresh_main_menu();
 		}

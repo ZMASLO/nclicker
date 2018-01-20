@@ -7,6 +7,7 @@ Window::Window(){
 	stats = newwin(38,53,0,90);
 	money = newwin(3,143,38,0);
 	menu_type=0;
+	menu_headlight=0;
 }
 
 void Window::draw_borders(){
@@ -23,14 +24,20 @@ void Window::draw_borders(){
 }
 void Window::draw_menu(){
 	box(main_menu,0,0);
-	if(menu_type==0){
+	if(menu_type==0){ //main_menu
 		mvwprintw(main_menu,4,10,"Inventory");
 		mvwprintw(main_menu,5,10,"Shop");
 		mvwprintw(main_menu,6,10,"Builders");
 		mvwprintw(main_menu,7,10,"Tavern");
 		mvwprintw(main_menu,8,10,"Bank");
 	}
-	if(menu_type==5){
+	if(menu_type==2){ //shop
+	    mvwprintw(main_menu,4,10,"<-- Back");
+	    for(int i=0; i<mshop->number_of_items(); ++i){
+		mvwprintw(main_menu,5+i,10,mshop->print_item(i).c_str()); //printing generated items
+	    }
+	}
+	if(menu_type==5){ //bank
 		mvwprintw(main_menu,4,10,"<-- Back");
 		mvwprintw(main_menu,5,10,"Buy upgrade!");
 	}
@@ -93,6 +100,24 @@ void Window::refresh_all(){
 	refresh_stats();
 }
 
+void Window::menu_up(){
+    if(menu_headlight>0){
+	--menu_headlight;
+    }
+}
+
+void Window::menu_down(){
+    if(menu_type==0 && menu_headlight<5){
+	++menu_headlight;
+    }
+    if(menu_type==2 && menu_headlight<mshop->number_of_items()){
+	++menu_headlight;
+    }
+    if(menu_type==5 && menu_headlight<1){
+	++menu_headlight;
+    }
+}
+
 void Window::selected(int headlight){
 	/*
 	 *	Menu types:
@@ -105,6 +130,7 @@ void Window::selected(int headlight){
 	 */
 	if(menu_type==0){ //options from main menu
 		if(headlight+1==1) menu_type=1;
+		if(headlight+1==2) menu_type=2;
 		if(headlight+1==5) menu_type=5;
 	}
 	if(menu_type!=0 && headlight+1==1) menu_type=0; //BACK TO MAIN MENU

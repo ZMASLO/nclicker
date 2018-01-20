@@ -31,7 +31,9 @@ class Player{
 
 class Window{
 	private:
-		int menu_type;
+		int menu_type; //determines whitch menu should be displayed
+		int menu_headlight; //determines whitch option should be headlighted
+		Shop *mshop;
 		WINDOW *main_menu;
 		WINDOW *stats;
 		WINDOW *money;
@@ -47,12 +49,15 @@ class Window{
 		void draw_popup(std::string information);
 		void draw_player_strenght(unsigned int strenght,unsigned int strength_max);
 		void draw_player_perclick(unsigned int perclick);
+		void menu_up();
+		void menu_down();
 		void refresh_main_menu() { wrefresh(main_menu); };
 		void refresh_stats() { wrefresh(stats); };
 		void refresh_popup() { wrefresh(popup); };
 		void refresh_money() { wrefresh(money); };
 		void refresh_all();
 		void selected(int headlight); //selected option form menu is executed
+		void set_shop(Shop &s) { mshop=&s; };
 
 		
 };
