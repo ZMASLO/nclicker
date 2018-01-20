@@ -25,7 +25,6 @@ bool kbhit()
 int main(void){
 	char ch=0;
 	bool run=1; //boolean to determine wheter game should run or not
-	int menu_option=0;
 	initscr();			/* Start curses mode 		  */
 	noecho();			//do not display getch()
 	cbreak();
@@ -54,28 +53,20 @@ int main(void){
 			game.draw_stats(&mplayer);
 		}
 		if(ch==107 || getch()==KEY_UP){ //k menu down
-			if(menu_option>0){
-				--menu_option;
-				game.draw_menu();
-				game.draw_headlight(menu_option);
-				game.refresh_main_menu();
-			}
+		    game.menu_up();
+		    game.draw_menu();
+		    game.refresh_main_menu();
 		}
 		if(ch==106){ //j menu up
-			if(menu_option<4){
-				++menu_option;
-				game.draw_menu();
-				game.draw_headlight(menu_option);
-				game.refresh_main_menu();
-			}
+		    game.menu_down();
+		    game.draw_menu();
+		    game.refresh_main_menu();
 		}
 		if(ch=='x'){
 			mplayer.add_upgrade(5);	
 		}
 		if(ch==10){ //enter select option
-		    game.selected(menu_option);
-		    menu_option=0;
-		    game.draw_headlight(menu_option);
+		    game.selected();
 		    game.refresh_main_menu();
 		}
 		if(ch==27){ //escape pause menu

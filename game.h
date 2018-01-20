@@ -42,7 +42,7 @@ class Window{
 		Window();
 		void draw_borders();
 		void draw_menu(); //draws menu and determine whitch one should be displayed
-		void draw_headlight(int headlight); //draws headlight -->
+		void draw_headlight(); //draws headlight -->
 		void draw_stats(Player *mplayer);
 		void draw_money(Player *mplayer);
 		void draw_workers();
@@ -56,7 +56,7 @@ class Window{
 		void refresh_popup() { wrefresh(popup); };
 		void refresh_money() { wrefresh(money); };
 		void refresh_all();
-		void selected(int headlight); //selected option form menu is executed
+		void selected(); //selected option form menu is executed
 		void set_shop(Shop &s) { mshop=&s; };
 
 		
