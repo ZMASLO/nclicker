@@ -33,7 +33,8 @@ class Window{
 	private:
 		int menu_type; //determines whitch menu should be displayed
 		int menu_headlight; //determines whitch option should be headlighted
-		Shop *mshop;
+		Shop *mshop; //pointer to shop data
+		Player *mplayer; //pointer to player data
 		WINDOW *main_menu;
 		WINDOW *stats;
 		WINDOW *money;
@@ -58,6 +59,7 @@ class Window{
 		void refresh_all();
 		void selected(); //selected option form menu is executed
 		void set_shop(Shop &s) { mshop=&s; };
+		void set_player(Player &p) { mplayer=&p; };
 
 		
 };

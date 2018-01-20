@@ -33,6 +33,7 @@ int main(void){
 	curs_set(0);
 	Window game;
 	Player mplayer;
+	game.set_player(mplayer);
 	Shop mshop;
 	game.set_shop(mshop);
 	mshop.generate_items(); //generating items for shop
@@ -52,12 +53,12 @@ int main(void){
 			game.draw_money(&mplayer);
 			game.draw_stats(&mplayer);
 		}
-		if(ch==107 || getch()==KEY_UP){ //k menu down
+		if(ch==107 || ch==KEY_UP){  //menu up
 		    game.menu_up();
 		    game.draw_menu();
 		    game.refresh_main_menu();
 		}
-		if(ch==106){ //j menu up
+		if(ch==106){ //j menu down
 		    game.menu_down();
 		    game.draw_menu();
 		    game.refresh_main_menu();
@@ -67,7 +68,8 @@ int main(void){
 		}
 		if(ch==10){ //enter select option
 		    game.selected();
-		    game.refresh_main_menu();
+		    game.draw_money(&mplayer);
+		    game.draw_stats(&mplayer);
 		}
 		if(ch==27){ //escape pause menu
 		    game.draw_popup("Game is paused!");
@@ -79,6 +81,9 @@ int main(void){
 			game.refresh_main_menu();
 		}
 		//napms(5); //little slowdown for program
+		}
+		else{
+		    napms(50); //if key is not presed its stoping program fo 50ms
 		}
 		time(&end);
 		if(difftime(end,start) > 1){  //tickrate

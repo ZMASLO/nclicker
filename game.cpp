@@ -8,6 +8,7 @@ Window::Window(){
 	money = newwin(3,143,38,0);
 	menu_type=0;
 	menu_headlight=0;
+	keypad(main_menu, TRUE);		//keypad F1 keys etc
 }
 
 void Window::draw_borders(){
@@ -26,16 +27,22 @@ void Window::draw_menu(){
 	wclear(main_menu);
 	box(main_menu,0,0);
 	if(menu_type==0){ //main_menu
-		mvwprintw(main_menu,4,10,"Inventory");
+		mvwprintw(main_menu,4,10,"Alchemist");
 		mvwprintw(main_menu,5,10,"Shop");
-		mvwprintw(main_menu,6,10,"Builders");
+		mvwprintw(main_menu,6,10,"Upgrades");
 		mvwprintw(main_menu,7,10,"Tavern");
 		mvwprintw(main_menu,8,10,"Bank");
 	}
+	if(menu_type==1){
+	    mvwprintw(main_menu,4,10,"<-- Back");
+	    for(int i=0; i<mshop->size_potion(); ++i){
+		mvwprintw(main_menu,5+i,10,mshop->print_potion(i).c_str()); //printing potions
+	    }
+	}
 	if(menu_type==2){ //shop
 	    mvwprintw(main_menu,4,10,"<-- Back");
-	    for(int i=0; i<mshop->number_of_items(); ++i){
-		mvwprintw(main_menu,5+i,10,mshop->print_item(i).c_str()); //printing generated items
+	    for(int i=0; i<mshop->size_food(); ++i){
+		mvwprintw(main_menu,5+i,10,mshop->print_food(i).c_str()); //printing food
 	    }
 	}
 	if(menu_type==5){ //bank
@@ -112,7 +119,10 @@ void Window::menu_down(){
     if(menu_type==0 && menu_headlight<4){
 	++menu_headlight;
     }
-    if(menu_type==2 && menu_headlight<mshop->number_of_items()){
+    if(menu_type==1 && menu_headlight<mshop->size_potion()){
+	++menu_headlight;
+    }
+    if(menu_type==2 && menu_headlight<mshop->size_food()){
 	++menu_headlight;
     }
     if(menu_type==5 && menu_headlight<1){
@@ -135,8 +145,28 @@ void Window::selected(){
 		if(menu_headlight+1==2) menu_type=2;
 		if(menu_headlight+1==5) menu_type=5;
 	}
-	if(menu_type!=0 && menu_headlight+1==1) menu_type=0; //BACK TO MAIN MENU
-	menu_headlight=0;
+	else{
+	    if(menu_type!=0 && menu_headlight+1==1) menu_type=0; //BACK TO MAIN MENU
+	}
+	if(menu_type==2){ //options for alchemist
+	   unsigned int *data; //declaring pointer (of array) 0 - price, 1 - quantity, 2 - stamina
+	   data=mshop->get_food(menu_headlight-1); //assigning pointer to array
+	   if(data[1]>0){
+		   if(mplayer->get_money()>data[0]){
+	               mplayer->add_money(data[0]*-1); //price * -1 to substract money
+		       mshop->buy_food(menu_headlight-1);
+		       mplayer->add_strength(data[2]);
+		   }
+		   else{
+		       draw_popup("You don't have enough money!");
+		   }
+	   }
+	   else{
+	       draw_popup("Item is not available yet!");
+	   }
+	   
+	}
+	//menu_headlight=0;
 	wclear(main_menu); //clear menu to avoid mistakes in render
 	draw_menu();
 	refresh_main_menu();
