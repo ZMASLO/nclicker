@@ -1,6 +1,6 @@
 #include "shop.h"
 #include <sstream>
-
+#include <fstream>
 
 Food :: Food(std::string mname,unsigned int mprice, unsigned int mquantity, unsigned int mstrength){
    name=mname;
@@ -41,9 +41,29 @@ void Potion :: set(std::string mname,unsigned int mprice, unsigned int mquantity
 }
 std::string Potion :: print_data(){
     std::stringstream buff;
-    buff<<name<<", Price: "<<price<<"$, Quantity: "<<quantity<<", Adds "<<stamina<< " maxium stamina";
+    buff<<name<<" potion, Price: "<<price<<"$, Quantity: "<<quantity<<", Adds "<<stamina<< " maxium stamina";
     std::string tmp = buff.str();
     return tmp;
+}
+
+std::string Upgrade :: print_data(){
+    std::stringstream buff;
+    buff<<name<<", Price: "<<price<<"$, Quantity: "<<quantity<<", Adds "<<pc<<"$ per click";
+    /*if(pc>=0 && exp==0 && level==0) buff<<name<<", Price: "<<price<<"$, Quantity: "<<quantity<<", Adds "<<pc<<"$ per click";
+    if(pc==0 && exp>=0 && level==0) buff<<name<<", Price: "<<price<<"$, Quantity: "<<quantity<<", Adds "<<exp<<" exp";
+    if(pc==0 && exp==0 && level>=0) buff<<name<<", Price: "<<price<<"$, Quantity: "<<quantity<<", Increases level by: "<<level;
+    if(money>=0 && exp>=0 && level==0) buff<<name<<", Price: "<<price<<"$, Quantity: "<<quantity<<", Adds "<<pc<<"$per click and "<<exp<<" exp";*/
+    std::string tmp = buff.str();
+    return tmp;
+}
+
+void Upgrade :: set(std::string mname, unsigned int mprice,unsigned int mquantity,unsigned int mpc){
+    name=mname;
+    price=mprice;
+    quantity=mquantity;
+    pc=mpc;
+    //exp=mexp;
+    //level=mlevel;
 }
 
 
@@ -55,17 +75,33 @@ void Shop::generate_items(){
     test[1]("Apple",5,5,5);
     test[2]("Meat",10,10,10);
     */
-    Food tmp;
-    for(int i=0; i<7; ++i){
-	tmp.set("Bread",5*i,1,i*4);
-	foods.push_back(tmp);
-    }
-    Potion ptmp;
-    for(int i=0; i<5; ++i){
-        ptmp.set("Light Potion",30,i,15);
-        potions.push_back(ptmp);
-    }
+    Food food_tmp;
+    Potion potion_tmp;
+    Upgrade upgrade_tmp;
+    std::string name,type;
+    int quantity,price,at;
+    std::ifstream file;
+    file.open("items.dat");
+    while(file){
+       file>>type;
+       file>>name;
+       file>>price;
+       file>>quantity;
+       file>>at;
+       if(type=="food"){
+	    food_tmp.set(name,price,quantity,at);
+	    foods.push_back(food_tmp);
+	}
+	if(type=="potion"){
+	    potion_tmp.set(name,price,quantity,at);
+	    potions.push_back(potion_tmp);
+	}
+	if(type=="upgrade"){
+	    upgrade_tmp.set(name,price,quantity,at);
+	    upgrades.push_back(upgrade_tmp);
+	}
 
+    }
 }
 
 std::string Shop::print_item(int id){
@@ -77,9 +113,9 @@ std::string Shop::print_item(int id){
     }
 }
 
-unsigned int* Shop :: get_food(int id){
-    unsigned int* pointer;
-    unsigned int tab[3];
+int* Shop :: get_food(int id){
+    int* pointer;
+    int tab[3];
     pointer=tab;
     tab[0]=foods[id].get_price();
     tab[1]=foods[id].get_quantity();
@@ -88,9 +124,9 @@ unsigned int* Shop :: get_food(int id){
     return pointer;
 }
 
-unsigned int* Shop :: get_potions(int id){
-    unsigned int* pointer;
-    unsigned int tab[3];
+int* Shop :: get_potions(int id){
+    int* pointer;
+    int tab[3];
     pointer=tab;
     tab[0]=potions[id].get_price();
     tab[1]=potions[id].get_quantity();
@@ -99,6 +135,18 @@ unsigned int* Shop :: get_potions(int id){
     return pointer;
 }
 
+int* Shop :: get_upgrades(int id){
+    int* pointer;
+    int tab[3];
+    pointer=tab;
+    tab[0]=upgrades[id].get_price();
+    tab[1]=upgrades[id].get_quantity();
+    tab[2]=upgrades[id].get_pc();
+    //tab[3]=upgrades[id].get_exp();
+    //tab[4]=upgrades[id].get_level();
+
+    return pointer;
+}
 
 std::string Shop::print_food(int id){
     return foods[id].print_data();
@@ -108,6 +156,10 @@ std::string Shop::print_potion(int id){
     return potions[id].print_data();
 }
 
+std::string Shop::print_upgrade(int id){
+    return upgrades[id].print_data();
+}
+
 int Shop::number_of_items(){
-    return foods.size()+potions.size();
+    return foods.size()+potions.size()+upgrades.size();
 }
