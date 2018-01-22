@@ -13,8 +13,10 @@ potion Kappa 100 5 25
 potion Grze 150 2 56
 potion Jenkin's 300 1 100
 potion ZMASLO's 1000 1 300
-upgrade Light 1 20 1
-upgrade Medium 5 20 2
-upgrade High 50 10 10
-upgrade Uber 150 5 20
-upgrade OP 300 1 100
+upgrade Light 1 20 1 0 0
+upgrade Medium 5 20 2 0 0
+upgrade High 50 10 10 0 0
+upgrade Uber 150 5 20 0 0
+upgrade OP 300 1 100 0 0
+upgrade EXP 100 10 0 40 0
+upgrade LVL 100 10 0 0 1

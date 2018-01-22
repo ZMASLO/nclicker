@@ -48,22 +48,22 @@ std::string Potion :: print_data(){
 
 std::string Upgrade :: print_data(){
     std::stringstream buff;
-    buff<<name<<", Price: "<<price<<"$, Quantity: "<<quantity<<", Adds "<<pc<<"$ per click";
-    /*if(pc>=0 && exp==0 && level==0) buff<<name<<", Price: "<<price<<"$, Quantity: "<<quantity<<", Adds "<<pc<<"$ per click";
+    //buff<<name<<", Price: "<<price<<"$, Quantity: "<<quantity<<", Adds "<<pc<<"$ per click";
+    if(pc>=0 && exp==0 && level==0) buff<<name<<", Price: "<<price<<"$, Quantity: "<<quantity<<", Adds "<<pc<<"$ per click";
     if(pc==0 && exp>=0 && level==0) buff<<name<<", Price: "<<price<<"$, Quantity: "<<quantity<<", Adds "<<exp<<" exp";
     if(pc==0 && exp==0 && level>=0) buff<<name<<", Price: "<<price<<"$, Quantity: "<<quantity<<", Increases level by: "<<level;
-    if(money>=0 && exp>=0 && level==0) buff<<name<<", Price: "<<price<<"$, Quantity: "<<quantity<<", Adds "<<pc<<"$per click and "<<exp<<" exp";*/
+    //if() buff<<name<<", Price: "<<price<<"$, Quantity: "<<quantity<<", Adds "<<pc<<"$per click and "<<exp<<" exp";
     std::string tmp = buff.str();
     return tmp;
 }
 
-void Upgrade :: set(std::string mname, unsigned int mprice,unsigned int mquantity,unsigned int mpc){
+void Upgrade :: set(std::string mname, unsigned int mprice,unsigned int mquantity,unsigned int mpc, unsigned int mexp, unsigned int mlevel){
     name=mname;
     price=mprice;
     quantity=mquantity;
     pc=mpc;
-    //exp=mexp;
-    //level=mlevel;
+    exp=mexp;
+    level=mlevel;
 }
 
 
@@ -79,7 +79,7 @@ void Shop::generate_items(){
     Potion potion_tmp;
     Upgrade upgrade_tmp;
     std::string name,type;
-    int quantity,price,at;
+    int quantity,price,at1,at2,at3;
     std::ifstream file;
     file.open("items.dat");
     while(file){
@@ -87,17 +87,19 @@ void Shop::generate_items(){
        file>>name;
        file>>price;
        file>>quantity;
-       file>>at;
+       file>>at1;
        if(type=="food"){
-	    food_tmp.set(name,price,quantity,at);
+	    food_tmp.set(name,price,quantity,at1);
 	    foods.push_back(food_tmp);
 	}
 	if(type=="potion"){
-	    potion_tmp.set(name,price,quantity,at);
+	    potion_tmp.set(name,price,quantity,at1);
 	    potions.push_back(potion_tmp);
 	}
 	if(type=="upgrade"){
-	    upgrade_tmp.set(name,price,quantity,at);
+	    file>>at2;
+	    file>>at3;
+	    upgrade_tmp.set(name,price,quantity,at1,at2,at3);
 	    upgrades.push_back(upgrade_tmp);
 	}
 
@@ -114,38 +116,38 @@ std::string Shop::print_item(int id){
 }
 
 int* Shop :: get_food(int id){
-    int* pointer;
-    int tab[3];
-    pointer=tab;
+    int* tab = new int[3];
+    //int tab[3];
+    //pointer=tab;
     tab[0]=foods[id].get_price();
     tab[1]=foods[id].get_quantity();
     tab[2]=foods[id].get_strength();
 
-    return pointer;
+    return tab;
 }
 
 int* Shop :: get_potions(int id){
-    int* pointer;
-    int tab[3];
-    pointer=tab;
+    int* tab = new int[3];
+    //int tab[3];
+    //pointer=tab;
     tab[0]=potions[id].get_price();
     tab[1]=potions[id].get_quantity();
     tab[2]=potions[id].get_stamina();
 
-    return pointer;
+    return tab;
 }
 
 int* Shop :: get_upgrades(int id){
-    int* pointer;
-    int tab[3];
-    pointer=tab;
+    int* tab = new int[5];
+    //int tab[3];
+    //pointer=&tab[0];
     tab[0]=upgrades[id].get_price();
     tab[1]=upgrades[id].get_quantity();
     tab[2]=upgrades[id].get_pc();
-    //tab[3]=upgrades[id].get_exp();
-    //tab[4]=upgrades[id].get_level();
+    tab[3]=upgrades[id].get_exp();
+    tab[4]=upgrades[id].get_level();
 
-    return pointer;
+    return tab;
 }
 
 std::string Shop::print_food(int id){

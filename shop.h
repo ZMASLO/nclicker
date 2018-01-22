@@ -40,16 +40,16 @@ class Potion : public Item{
 class Upgrade : public Item{
     private:
 	unsigned int pc; //money per click
-	//unsigned int exp;
-	//unsigned int level;
+	unsigned int exp;
+	unsigned int level;
     public:
 	Upgrade() {};
-	//void set(std::string mname, unsigned int mprice, unsigned int mquantity, unsigned int mpc, unsigned int mexp,unsigned int mlevel);
-	void set(std::string mname, unsigned int mprice, unsigned int mquantity, unsigned int mpc);
+	void set(std::string mname, unsigned int mprice, unsigned int mquantity, unsigned int mpc, unsigned int mexp,unsigned int mlevel);
+//	void set(std::string mname, unsigned int mprice, unsigned int mquantity, unsigned int mpc);
 	std::string print_data();
 	unsigned int get_pc() { return pc; };
-	//unsigned int get_exp() { return exp; };
-	//unsigned int get_level() { return level; };
+	unsigned int get_exp() { return exp; };
+	unsigned int get_level() { return level; };
 
 };
 

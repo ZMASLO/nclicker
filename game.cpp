@@ -176,10 +176,10 @@ void Window::selected(){
 		       if(menu_type==3){ //if in Upgrades
 			    mshop->buy_upgrade(menu_headlight-1);
 			    mplayer->add_upgrade(data[2]);
-			    //mplayer->add_exp(data[3]);
-			    //for(int i=0; i<data[4]; ++i){
-			//	mplayer->add_level();
-			  //  }
+			    mplayer->add_exp(data[3]);
+			    for(int i=0; i<data[4]; ++i){
+				mplayer->add_level();
+			    }
 		       }
 		   }
 		   else{
