@@ -17,6 +17,6 @@ upgrade Light 1 20 1 0 0
 upgrade Medium 5 20 2 0 0
 upgrade High 50 10 10 0 0
 upgrade Uber 150 5 20 0 0
-upgrade OP 300 1 100 0 0
+upgrade OP 300 1 100 30 0
 upgrade EXP 100 10 0 40 0
-upgrade LVL 100 10 0 0 1
+upgrade LVL 10000 10 0 0 1

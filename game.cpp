@@ -6,6 +6,7 @@ Window::Window(){
 	main_menu=newwin(38,90,0,0);
 	stats = newwin(38,53,0,90);
 	money = newwin(3,143,38,0);
+	bottom_bar = newwin(3,143,41,0);
 	menu_type=0;
 	menu_headlight=0;
 	keypad(main_menu, TRUE);		//keypad F1 keys etc
@@ -23,7 +24,7 @@ void Window::draw_borders(){
 		}
 	}
 }
-void Window::draw_menu(){
+void Window::draw_menu(){ //function responsible for drawing menu and it's options
 	wclear(main_menu);
 	box(main_menu,0,0);
 	if(menu_type==0){ //main_menu
@@ -49,8 +50,12 @@ void Window::draw_menu(){
 		mvwprintw(main_menu,5+i,10,mshop->print_upgrade(i).c_str());
 	    }
 	}
+	if(menu_type==4){
+		mvwprintw(main_menu,5,10,"Buy Worker for: %d",mplayer->get_worker_price());
+		mvwprintw(main_menu,6,10,"Buy Upgrade for: %d",mplayer->get_worker_upgrade_price());
+	}
 	if(menu_type==5){ //bank
-		mvwprintw(main_menu,5,10,"Buy upgrade for %d$",mplayer->get_money_max()/5);
+		mvwprintw(main_menu,5,10,"Buy upgrade for: %d$",mplayer->get_money_max()/5);
 	}
 	draw_headlight();
 }
@@ -67,13 +72,20 @@ void Window::draw_headlight(){
 
 void Window::draw_stats(Player *mplayer){
 	wclear(stats);
+	wclear(bottom_bar);
 	box(stats,0,0);
+	box(bottom_bar,0,0);
 	mvwprintw(stats,4,10,"Level: %d",mplayer->get_level());
 	mvwprintw(stats,5,10,"Exp: %d / %d",mplayer->get_exp(),mplayer->get_exp_level());
 	mvwprintw(stats,6,10,"Stamina: %d / %d",mplayer->get_strength(),mplayer->get_strength_max());
 	mvwprintw(stats,7,10,"Money Per Click: %d",mplayer->get_upgrade());
 	mvwprintw(stats,8,10,"Game Time: %d",mplayer->get_game_time());
+	//bottom bar
+	mvwprintw(bottom_bar,1,4,"Workes: %d",mplayer->get_worker());
+	mvwprintw(bottom_bar,1,66,"Workes Level: %d",mplayer->get_worker_upgrade());
+	mvwprintw(bottom_bar,1,120,"Shop refresh in: %d",mplayer->get_shop_time());
 	refresh_stats();
+	refresh_bottom_bar();
 }
 
 void Window::draw_popup(std::string information){
@@ -100,7 +112,7 @@ void Window::draw_money(Player *mplayer){
 	box(money,0,0);
 	attron(A_BOLD);
 	mvwprintw(money,1,65,"Money: %d$ / %d$ ",mplayer->get_money(),mplayer->get_money_max());	
-	attroff(A_BOLD);
+	//attroff(A_BOLD);
 	refresh_money();
 }
 
@@ -117,13 +129,13 @@ void Window::refresh_all(){
 	refresh_stats();
 }
 
-void Window::menu_up(){
+void Window::menu_up(){ //moves headlight up
     if(menu_headlight>0){
 	--menu_headlight;
     }
 }
 
-void Window::menu_down(){
+void Window::menu_down(){ //moves headlight down
     if(menu_type==0 && menu_headlight<4){
 	++menu_headlight;
     }
@@ -134,6 +146,9 @@ void Window::menu_down(){
 	++menu_headlight;
     }
     if(menu_type==3 && menu_headlight<mshop->size_upgrade()){
+	++menu_headlight;
+    }
+    if(menu_type==4 && menu_headlight<2){
 	++menu_headlight;
     }
     if(menu_type==5 && menu_headlight<1){
@@ -191,6 +206,29 @@ void Window::selected(){
 		}
 
 	    }
+	    if(menu_type==4){
+		if(menu_headlight==1){
+		    if(mplayer->get_money()>=mplayer->get_worker_price()){
+			//mplayer->buy_worker();
+		    }
+		    else{
+			draw_popup("You don't have enough money!");
+		    }
+		}
+		if(menu_headlight==2){
+		    if(mplayer->get_worker()>=0){
+			if(mplayer->get_money()>=mplayer->get_worker_upgrade_price()){
+			    //mplayer->buy_worker_upgrade();
+			}
+			else{
+			    draw_popup("You don't have enough money!");
+			}
+		    }
+		    else{
+			draw_popup("Buy worker first!");
+		    }
+		}
+	    }
 	    if(menu_type==5){
 		if(mplayer->get_money()>=mplayer->get_money_max()/5){
 		    if(menu_headlight==1){
@@ -207,40 +245,4 @@ void Window::selected(){
 	draw_menu();
 	refresh_main_menu();
 }
-
-Player::Player(){
-	money=0;
-	money_max=5000;
-	strength=100;
-	strength_max=500;
-	level=1;
-	exp=0;
-	upgrade=1;
-	exp_level=30;
-	game_time=0;
-}
-
-void Player::add_money(int ammount){
-	if((money+ammount) < money_max){
-		money=money+ammount;	
-	}
-	else{
-		money=money_max; //to not override maximum ammount
-	}
-}
-
-void Player::add_strength(int ammount){
-	if((strength+ammount) < strength_max){
-		strength=strength+ammount;
-	}
-	else{
-	    strength=strength_max;
-	}
-}
-
-void Player::add_strength_max(int ammount){
-	strength_max=strength_max+ammount;
-}
-
-
 

@@ -36,7 +36,7 @@ int main(void){
 	game.set_player(mplayer);
 	Shop mshop;
 	game.set_shop(mshop);
-	mshop.generate_items(); //generating items for shop
+	mshop.generate_items(mplayer.get_level()); //generating items for shop
 	clock_t start,end;
 	time(&start);
 	while(run==1){
@@ -77,8 +77,8 @@ int main(void){
 		    game.refresh_main_menu();
 		}
 		if(ch=='o'){
-			//Food chleb("Bread",10,1,5);
-			game.draw_popup(mshop.print_upgrade(0));
+		    game.draw_popup("Refreshing shop!");
+		    mshop.generate_items(mplayer.get_level());
 		}
 		if(mplayer.get_exp()>=mplayer.get_exp_level()){ //leveling up
 		    mplayer.add_level();
@@ -90,12 +90,22 @@ int main(void){
 		}
 		time(&end);
 		if(difftime(end,start) > 1){  //tickrate
-			mplayer.add_money(1);
-			mplayer.add_strength(1*mplayer.get_level());
+			mplayer.add_money(mplayer.get_worker()*mplayer.get_worker_upgrade()); //ammonut money per second
+			mplayer.add_strength(1*mplayer.get_level()); //adds stamina per second
 			mplayer.add_game_time();
+			mplayer.add_shop_time();
+			if(mplayer.get_shop_time()==1){
+			    mshop.generate_items(mplayer.get_level());
+			}
 			game.draw_stats(&mplayer);
 			game.draw_money(&mplayer);
+			game.draw_menu();
+			game.refresh_main_menu();
 			time(&start);
+		}
+		if(mplayer.get_money()>=1000000){
+		    game.draw_popup("Congratulations! You won game!");
+		    return 0;
 		}
 	}
 	endwin();
