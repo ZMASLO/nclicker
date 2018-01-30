@@ -53,18 +53,18 @@ int main(void){
 			game.draw_money(&mplayer);
 			game.draw_stats(&mplayer);
 		}
-		if(ch==107 || ch==KEY_UP){  //menu up
+		if(ch==107 || ch==KEY_UP || ch=='w'){  //menu up
 		    game.menu_up();
 		    game.draw_menu();
 		    game.refresh_main_menu();
 		}
-		if(ch==106){ //j menu down
+		if(ch==106 || ch==KEY_DOWN || ch=='s'){ //j menu down
 		    game.menu_down();
 		    game.draw_menu();
 		    game.refresh_main_menu();
 		}
 		if(ch=='x'){
-			mplayer.add_upgrade(5);	
+			mplayer.buy_worker();	
 		}
 		if(ch==10){ //enter select option
 		    game.selected();
@@ -76,9 +76,8 @@ int main(void){
 		    game.draw_menu();
 		    game.refresh_main_menu();
 		}
-		if(ch=='o'){
-		    game.draw_popup("Refreshing shop!");
-		    mshop.generate_items(mplayer.get_level());
+		if(ch=='z'){
+		   mplayer.buy_worker_upgrade(); 
 		}
 		if(mplayer.get_exp()>=mplayer.get_exp_level()){ //leveling up
 		    mplayer.add_level();

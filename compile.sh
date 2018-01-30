@@ -1,1 +1,1 @@
-clear && g++ *.cpp *.h -o odpal -lncurses && ./odpal
+clear && g++ *.cpp *.h -o binary -lncurses && ./binary

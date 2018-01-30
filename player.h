@@ -29,7 +29,7 @@ class Player{
 		void add_upgrade(unsigned int ammount) { upgrade=upgrade+ammount; };
 		void add_game_time() { ++game_time; };
 		void add_shop_time();
-		void buy_worker() { ++worker; money=money-worker_price; worker_price=worker_price*30; };
+		void buy_worker() { ++worker; worker_price=worker_price*3; };
 		void buy_worker_upgrade();
 		unsigned int get_upgrade() { return upgrade; } ;
 		unsigned int get_strength() { return strength; };

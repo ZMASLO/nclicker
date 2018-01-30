@@ -42,9 +42,8 @@ void Player::add_strength_max(int ammount){
 }
 
 void Player::buy_worker_upgrade(){
-     worker_upgrade=worker_upgrade*6;
-     money=money-worker_upgrade_price;
-     worker_upgrade_price=worker_upgrade_price*9;
+     ++worker_upgrade;
+     worker_upgrade_price=worker_upgrade_price*3;
 }
 
 void Player::add_shop_time(){

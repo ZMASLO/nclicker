@@ -14,6 +14,7 @@ void Shop::generate_items(int level){
     int quantity,price,at1,at2,at3;
     std::ifstream file;
     file.open("items.dat");
+    if(file.is_open()){
     while(file){
        file>>type;
        file>>name;
@@ -37,6 +38,10 @@ void Shop::generate_items(int level){
 
     }
     file.close();
+    }
+    else{
+	throw "Unable to open file with items";
+    }
 }
 
 std::string Shop::print_item(int id){
