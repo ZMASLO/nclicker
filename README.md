@@ -1,12 +1,15 @@
 # nclicker
 Clicker game written in ncurses
 
-#Dependencies:
+## Dependencies:
 
 ncurses-dev
 
-Controls:
+## Controls:
 
 Space - Money
-j,k - Menu controll
+
+j,k or w,s - Menu controll
+
+Enter - Select option
 
