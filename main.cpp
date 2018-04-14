@@ -3,6 +3,9 @@
 #include "game.h"
 #include <sys/ioctl.h> // for my own kbhit
 #include <termios.h> //for my own kbhit
+#include <stdlib.h> //system operations lib
+
+using namespace std;
 
 bool kbhit()
 {
@@ -23,6 +26,7 @@ bool kbhit()
 
 
 int main(void){
+	system("resize -s 45 145"); //resize terminal to optimal width and height
 	char ch=0;
 	bool run=1; //boolean to determine wheter game should run or not
 	initscr();			/* Start curses mode 		  */
@@ -104,6 +108,11 @@ int main(void){
 		}
 		if(mplayer.get_money()>=1000000){
 		    game.draw_popup("Congratulations! You won game!");
+		    return 0;
+		}
+		if(mplayer.get_out_end()==1){ //active when game is being closed
+		    game.draw_popup("Thanks for playing! See you soon!");
+		    system("clear");
 		    return 0;
 		}
 	}

@@ -1,5 +1,11 @@
 #include "game.h"
 #include <ncurses.h>
+#include <iostream>
+#include <fstream>
+#include <cstdlib>
+#include <stdlib.h>
+
+using namespace std;
 
 Window::Window(){
 	//WINDOW SIZE IS DEFAULT 45X145
@@ -33,6 +39,7 @@ void Window::draw_menu(){ //function responsible for drawing menu and it's optio
 		mvwprintw(main_menu,6,10,"Upgrades");
 		mvwprintw(main_menu,7,10,"Tavern");
 		mvwprintw(main_menu,8,10,"Bank");
+		mvwprintw(main_menu,9,10,"Quit");
 	}
 	if(menu_type>0) mvwprintw(main_menu,4,10,"<-- Back");
 	if(menu_type==1){
@@ -57,7 +64,15 @@ void Window::draw_menu(){ //function responsible for drawing menu and it's optio
 	if(menu_type==5){ //bank
 		mvwprintw(main_menu,5,10,"Buy upgrade for: %d$",mplayer->get_money_max()/5);
 	}
+	if(menu_type==6){ //quit
+		ngame_quit();
+	}
 	draw_headlight();
+}
+
+void Window::ngame_quit(){ //quit menu
+	mvwprintw(main_menu,5,10,"Exit without save:",mplayer->get_game_quit());
+	mvwprintw(main_menu,6,10,"Exit with save:",mplayer->get_game_quit());
 }
 
 void Window::draw_headlight(){
@@ -136,7 +151,7 @@ void Window::menu_up(){ //moves headlight up
 }
 
 void Window::menu_down(){ //moves headlight down
-    if(menu_type==0 && menu_headlight<4){
+    if(menu_type==0 && menu_headlight<5){
 	++menu_headlight;
     }
     if(menu_type==1 && menu_headlight<mshop->size_potion()){
@@ -148,10 +163,13 @@ void Window::menu_down(){ //moves headlight down
     if(menu_type==3 && menu_headlight<mshop->size_upgrade()){
 	++menu_headlight;
     }
-    if(menu_type==4 && menu_headlight<2){
+    if(menu_type==4 && menu_headlight<3){
 	++menu_headlight;
     }
-    if(menu_type==5 && menu_headlight<1){
+    if(menu_type==5 && menu_headlight<2){
+	++menu_headlight;
+    }
+    if(menu_type==6 && menu_headlight<2){ //to quit menu
 	++menu_headlight;
     }
 }
@@ -165,6 +183,7 @@ void Window::selected(){
 	 *	3 - Upgrades
 	 *	4 - Tavern
 	 *	5 - Bank
+	 *	6 - Quit
 	 */
 	int *data; //declaring pointer (of array)
 	if(menu_type==0){ //options from main menu
@@ -238,6 +257,36 @@ void Window::selected(){
 		}
 		else{
 		    draw_popup("You don't have enough money!");
+		}
+	    }
+	    if(menu_type==6){
+		if(menu_headlight==1){ //exit without save
+			mplayer->add_end(1);
+		}
+		if(menu_headlight==2){ //exit with save
+			fstream save_file;
+			save_file.open("./saves/save",ios::out);
+
+			save_file<<"_Welcome in the save file!_"<<endl;
+			save_file<<"============================"<<endl;
+			save_file<<mplayer->get_upgrade()<<endl;
+			save_file<<mplayer->get_strength()<<endl;
+			save_file<<mplayer->get_strength_max()<<endl;
+			save_file<<mplayer->get_money()<<endl;
+			save_file<<mplayer->get_money_max()<<endl;
+			save_file<<mplayer->get_level()<<endl;
+			save_file<<mplayer->get_exp()<<endl;
+			save_file<<mplayer->get_exp_level()<<endl;
+			save_file<<mplayer->get_game_time()<<endl;
+			save_file<<mplayer->get_shop_time()<<endl;
+			save_file<<mplayer->get_worker()<<endl;
+			save_file<<mplayer->get_worker_upgrade()<<endl;
+			save_file<<mplayer->get_worker_upgrade_price()<<endl;
+			save_file<<mplayer->get_worker_price()<<endl;
+			save_file<<"_____END_OF_SAVE_FILE_____"<<endl;
+			save_file.close();
+			save_file.clear();
+			mplayer->add_end(1);
 		}
 	    }
 	}

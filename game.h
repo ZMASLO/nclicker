@@ -5,6 +5,7 @@
 
 class Window{
 	private:
+		
 		int menu_type; //determines whitch menu should be displayed
 		int menu_headlight; //determines whitch option should be headlighted
 		Shop *mshop; //pointer to shop data
@@ -37,6 +38,7 @@ class Window{
 		void set_shop(Shop &s) { mshop=&s; };
 		void set_player(Player &p) { mplayer=&p; };
 		void set_main_menu() { menu_type=0; menu_headlight=0; };
+		void ngame_quit();
 
 		
 };

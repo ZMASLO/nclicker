@@ -17,6 +17,8 @@ class Player{
 		unsigned int worker_price;
 		unsigned int game_time;
 		unsigned int shop_time;
+		unsigned int game_quit;
+		unsigned int in_end;
 
 	public:
 		Player();
@@ -46,6 +48,9 @@ class Player{
 		unsigned int get_worker_upgrade_price() { return worker_upgrade_price; };
 		unsigned int get_worker_price() { return worker_price; };
 		void upgrade_bank() { money_max=money_max*6; }; 
+		unsigned int get_game_quit(){return game_quit;};
+		void add_end(int ammount);
+		unsigned int get_out_end(){return in_end;};
 
 };
 
